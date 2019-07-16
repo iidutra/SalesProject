@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using SaleProjetoMVC.Models;
 
 namespace SaleProjetoMVC {
     public class Startup {
@@ -28,6 +30,9 @@ namespace SaleProjetoMVC {
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+    services.AddDbContext<SaleProjetoMVCContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("SaleProjetoMVCContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
