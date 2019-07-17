@@ -16,7 +16,7 @@ namespace SaleProjetoMVC.Models
         {
 
         }
-
+       
         public SalesRecord(int id, DateTime date, double amount, SaleStatus status, Seller seller)
         {
             this.id = id;
