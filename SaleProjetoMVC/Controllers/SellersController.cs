@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SaleProjetoMVC.Models;
+using SaleProjetoMVC.Models.ViewModels;
 using SaleProjetoMVC.Services;
 
 namespace SaleProjetoMVC.Controllers
@@ -11,10 +12,12 @@ namespace SaleProjetoMVC.Controllers
     public class SellersController : Controller
     {
         private readonly SellerService _sellerService;
+        private readonly DepartamentService _departamentService;
 
-        public SellersController(SellerService sellerService)
+        public SellersController(SellerService sellerService, DepartamentService departamentService)
         {
             _sellerService = sellerService;
+            _departamentService = departamentService;
         }
         public IActionResult Index()
         {
@@ -23,7 +26,10 @@ namespace SaleProjetoMVC.Controllers
         }
         public IActionResult Create()
         {
-            return View();
+            ViewBag.Departaments = _departamentService.FindAll();
+            var departaments = _departamentService.FindAll();
+            var viewModel = new SellerFormViewModel { Departaments = departaments };
+            return View(viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
