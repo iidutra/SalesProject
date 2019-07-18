@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SaleProjetoMVC.Models;
 using Microsoft.EntityFrameworkCore;
+using SaleProjetoMVC.Services.Exceptions;
 
 namespace SaleProjetoMVC.Services
 {
@@ -37,5 +38,22 @@ namespace SaleProjetoMVC.Services
             _context.Seller.Remove(obj);
             _context.SaveChanges();
         }
+        public void Update(Seller obj)
+        {
+            if (!_context.Seller.Any(x => x.id == obj.id))
+            {
+                throw new NotFoundException("Id not found");
+            }
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+            }
+            catch(DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
+        }
+
     }
 }
