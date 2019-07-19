@@ -33,5 +33,23 @@ namespace SaleProjetoMVC.Services
                 .OrderBy(x => x.Date)
                 .ToListAsync();
         }
+
+        public async Task<List<IGrouping<Departament, SalesRecord>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)
+        {
+            var result = from obj in _context.SalesRecord select obj;
+            if (minDate.HasValue)
+            {
+                result = result.Where(x => x.Date >= minDate.Value);
+            }
+            if (maxDate.HasValue)
+            {
+                result = result.Where(x => x.Date <= maxDate.Value);
+            }
+            return await result
+                .Include(x => x.Seller)
+                .Include(x => x.Seller.Departament)
+                .GroupBy(x => x.Seller.Departament)
+                .ToListAsync();
+        }
     }
 }
